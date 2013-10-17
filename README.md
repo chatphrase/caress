@@ -1,4 +1,3 @@
-crests
-======
+# caress
 
-Chatphrase REST Signaling app
+Chatphrase Asynchronous Representational State Signaling
