@@ -1,0 +1,29 @@
+{
+  "name": "caress",
+  "version": "0.1.0",
+  "description": "Chatphrase Asynchronous Representational State Signaling",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stuartpb/caress.git"
+  },
+  "keywords": [
+    "chatphrase",
+    "rest",
+    "webrtc",
+    "signaling"
+  ],
+  "author": "Stuart P. Bentley <stuart@testtrack4.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stuartpb/caress/issues"
+  },
+  "dependencies": {
+    "uuid": "~1.4.1",
+    "redis": "~0.8.6",
+    "express": "~3.4.1"
+  }
+}
