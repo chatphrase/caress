@@ -25,5 +25,8 @@
     "uuid": "~1.4.1",
     "redis": "~0.8.6",
     "express": "~3.4.1"
+  },
+  "devDependencies": {
+    "envigor": "~0.4.2"
   }
 }
