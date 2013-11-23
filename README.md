@@ -51,12 +51,18 @@ clear the offer on the "path" when an offer is answered).
 
 The content to read when GETting that UUID.
 
-### get/id/{uuid}/offerat
+### get/id/{uuid}/offer/path
 
-The additional key to update (location/path/{path}) for an unanswered offer.
+The path location to update (location/path/{path}) for an unanswered offer.
 Used to refresh the TTL when polling for an unanswered offer via GET: also
 denotes that the empty body of get/id/{uuid} does not denote a missing/dead
 connection.
+
+### get/id/{uuid}/offer/id
+
+The UUID value to update (post/id/{uuid}/from, post/id/{uuid}/to) for an
+unanswered offer, stored so as to not require a second trip to dereference
+get/id/{uuid}/offer/path.
 
 ### put/id/{uuid}
 
