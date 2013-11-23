@@ -1,1 +1,1 @@
-curl -v -X PUT -H "Content-Type: text/plain" --data-binary $1 localhost:3000$2
+curl -v -X PUT -H "Content-Type: text/plain" --data-binary $2 localhost:3000$1
