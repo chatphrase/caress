@@ -53,12 +53,10 @@ The content to read when GETting that UUID.
 
 ### get/id/{uuid}/offerat
 
-The key (get/path/{path}) for an unanswered offer. Used to refresh the TTL when
-polling for an unanswered offer via GET: also denotes that the empty body of
-get/id/{uuid} does not denote a missing/dead connection.
-
-This is identical to put/id/{uuid} for the given UUID when present, and it
-effectively serves the purpose of a boolean flag.
+The additional key to update (location/path/{path}) for an unanswered offer.
+Used to refresh the TTL when polling for an unanswered offer via GET: also
+denotes that the empty body of get/id/{uuid} does not denote a missing/dead
+connection.
 
 ### put/id/{uuid}
 
