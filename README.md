@@ -19,14 +19,15 @@ Configuration for the database espects a "redis" object with "port" and
 
 ## Understanding the DB layout
 
-The different stages of connection in offeranswer.js use many different formats
-of key names in Redis (that are somewhat opaque regarding what the
-corresponding semantics of the value are). Here's a guide:
+Due to the labyrinthine and chaotic evolution of this project, the different
+stages and states of connection in offeranswer.js use many different formats
+of key names in Redis with meanings that vary dependent on the values of other
+keys. Here's a guide:
 
 ### get/path/{path}
 
 The content of an offer on a "path" (the external non-UUID string to identify
-an offer).
+an offer, ie. the phrase for a Chatphrase offer).
 
 ### location/path/{path}
 
