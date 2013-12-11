@@ -1,6 +1,6 @@
 {
   "name": "caress",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Chatphrase Asynchronous Representational State Signaling",
   "main": "index.js",
   "scripts": {
