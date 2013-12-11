@@ -15,7 +15,7 @@ run.
 Configuration for the database espects a "redis" object with "port" and
 "hostname", as used by [envigor][].
 
-[envigor]:
+[envigor]: https://github.com/stuartpb/envigor
 
 ## Understanding the DB layout
 
