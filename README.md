@@ -39,17 +39,28 @@ suffixes (as the suffix could then sneak its way into a non-suffixed update).
 
 ### post/id/{uuid}/to
 
-The UUID used by the offerer listening for answers posted to the given UUID in
-the key (used to set the destination when creating an answer handler).
+For offer answers, the UUID used by the offerer listening for answers posted to
+the given UUID in the key (used to set the destination when creating an answer
+handler).
+
+For answerers and answered offers, the UUID of the other end (similar to
+put/id/{uuid}, but with the UUID rather than the "get/id/{uuid}" key), for use
+in posting new messages to the message list.
+
+For unanswered offers, the same value as {uuid}, to signify that the value of
+post/id/{uuid}/from should be used rather than post/id/{uuid}/to.
 
 ### post/id/{uuid}/from
 
-The "path" of the offer whose response location is the given UUID (used to
-clear the offer on the "path" when an offer is answered).
+For offer asnwer UUIDs, the "path" of the offer whose response location is the
+given UUID (used to clear the offer on the "path" when an offer is answered).
+
+For unanswered offers, this is the path that new messages will be POSTed to.
 
 ### get/id/{uuid}
 
-The content to read when GETting that UUID.
+The list of messages to read when GETting that UUID. The 0-index will be gotten
+when GETting the root.
 
 ### get/id/{uuid}/offer/path
 
