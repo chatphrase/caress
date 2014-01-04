@@ -20,7 +20,7 @@ Configuration for the database espects a "redis" object with "port" and
 ## Understanding the DB layout
 
 Due to the labyrinthine and chaotic evolution of this project, the different
-stages and states of connection in offeranswer.js use many different formats
+stages and states of connection in caress use many different formats
 of key names in Redis with meanings that vary dependent on the values of other
 keys. Here's a guide:
 
