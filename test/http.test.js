@@ -47,7 +47,7 @@ function assertStatus(rightStatus, cb) {
   return function (err, res, body) {
     if (err) return cb(err);
 
-    assert(res.statusCode == rightStatus);
+    assert.equal(res.statusCode, rightStatus);
     cb && cb(err, res, body);
   };
 }
@@ -56,7 +56,7 @@ function assertBody(rightBody, cb) {
   return function (err, res, body) {
     if (err) return cb(err);
 
-    assert(body == rightBody);
+    assert.equal(body, rightBody);
     cb && cb(err, res, body);
   };
 }
@@ -115,18 +115,18 @@ describe("Offer-Answer flow", function() {
         localPost(endpoint, obody, function(err, res, body) {
           // This will be set a couple callbacks down
           var expectedAnswer, finalCallback;
-          
+
           localGet(res.headers.location, receiveAnswer);
-          
+
           cb(err,function answerer(abody, fcb) {
             expectedAnswer = abody; finalCallback = fcb;
             localGet(endpoint,function(err,res,body){
               localPost(res.headers.location, abody);
             });
           });
-          
+
           function receiveAnswer(err, res, body) {
-            assert(body == expectedAnswer);
+            assert.equal(body, expectedAnswer);
             finalCallback && finalCallback(err);
           }
         });
