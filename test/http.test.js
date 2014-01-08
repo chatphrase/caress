@@ -35,11 +35,12 @@ function cbwrap(func) {
 var localRoot = 'http://localhost:' + cfg.port;
 
 function localGet(url, cb) {
-  return request(localRoot + url, cb);
+  return request({url: localRoot + url, encoding: 'utf8',
+    method: 'GET'}, cb);
 }
 
 function localPost(url, body, cb) {
-  return request({url: localRoot + url,
+  return request({url: localRoot + url, encoding: 'utf8',
     method: 'POST', body: body}, cb);
 }
 
