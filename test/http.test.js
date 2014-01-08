@@ -2,6 +2,7 @@
 
 var assert = require('assert');
 var request = require('request');
+var queue = require('queue-async');
 
 var cfg = require("envigor")();
 
@@ -107,14 +108,39 @@ describe("Offer-Answer flow", function() {
       }
     });
     it("should not be received by other offers", function(done) {
-      var endpointa = '/offers/point-a';
-      var endpointb = '/offers/point-b';
-      var obodya = 'offer a initial body';
-      var abodya = 'answer a initial body';
-      var obodyb = 'offer b initial body';
-      var abodyb = 'answer b initial body';
-      
-      // TODO: finish this test case
+      // This function calls a callback that takes a function that sets a
+      // callback for a call that was made *earlier*. This makes sense in my
+      // head, even though it's totally bananas in code.
+      function timeyWimeyBall(endpoint, obody, cb) {
+        localPost(endpoint, obody, function(err, res, body) {
+          // This will be set a couple callbacks down
+          var expectedAnswer, finalCallback;
+          
+          localGet(res.headers.location, receiveAnswer);
+          
+          cb(err,function answerer(abody, fcb) {
+            expectedAnswer = abody; finalCallback = fcb;
+            localGet(endpoint,function(err,res,body){
+              localPost(res.headers.location, abody);
+            });
+          });
+          
+          function receiveAnswer(err, res, body) {
+            assert(body == expectedAnswer);
+            finalCallback && finalCallback(err);
+          }
+        });
+      }
+
+      queue()
+        .defer(timeyWimeyBall, '/offers/point-a', 'Offer A initial body')
+        .defer(timeyWimeyBall, '/offers/point-b', 'Offer B initial body')
+        .await(function(err, answererA, answererB){
+          queue()
+            .defer(answererA,'Answer A initial body')
+            .defer(answererB,'Answer B initial body')
+            .await(done);
+        });
     });
   });
 });
