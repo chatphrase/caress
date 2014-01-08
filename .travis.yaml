@@ -1,0 +1,8 @@
+env:
+  global:
+  - REDIS_SERVER=localhost
+services:
+- redis-server
+language: node_js
+node_js:
+- "0.10"
