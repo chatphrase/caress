@@ -18,7 +18,7 @@ var app = require('../lib/caress.js')(cfg);
 
 // This should probably be done as somesort of setup/teardown around each
 // test case, with the redis DB being cleared in every teardown. But, for now,
-// we're just going to declare that noe server is good enough to catch the
+// we're just going to declare that one server is good enough to catch the
 // things we're looking for.
 var server = require('http').createServer(app);
 server.listen(cfg.port);
@@ -36,28 +36,36 @@ var localRoot = 'http://localhost:' + cfg.port;
 
 function localGet(url, cb) {
   return request({url: localRoot + url, encoding: 'utf8',
-    method: 'GET'}, cb);
+    method: 'GET'}, assertServerSuccess(cb));
 }
 
 function localPost(url, body, cb) {
   return request({url: localRoot + url, encoding: 'utf8',
-    method: 'POST', body: body}, cb);
+    method: 'POST', body: body}, assertServerSuccess(cb));
 }
 
-function assertStatus(rightStatus, cb) {
+function assertServerSuccess(cb) {
+  return function(err, res, body) {
+    if (res.statusCode >= 500) {
+      assert.fail(res.statusCode, 500, body, '<');
+    } else cb && cb(err,res,body);
+  };
+}
+
+function assertStatus(expected, cb) {
   return function (err, res, body) {
     if (err) return cb(err);
 
-    assert.equal(res.statusCode, rightStatus);
+    assert.equal(res.statusCode, expected);
     cb && cb(err, res, body);
   };
 }
 
-function assertBody(rightBody, cb) {
+function assertBody(expected, cb) {
   return function (err, res, body) {
     if (err) return cb(err);
 
-    assert.equal(body, rightBody);
+    assert.equal(body, expected);
     cb && cb(err, res, body);
   };
 }
