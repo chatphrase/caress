@@ -89,7 +89,7 @@ describe("Offer-Answer flow", function() {
         cbwrap(localGet,endpoint,assertStatus(200,answerOffer))));
 
       function answerOffer(err, res, body) {
-        localPost(res.headers.location, abody,
+        localPost(res.headers['reply-location'], abody,
           cbwrap(localGet,endpoint,assertStatus(404,done)));
       }
     });
@@ -105,7 +105,7 @@ describe("Offer-Answer flow", function() {
       }
 
       function answerOffer(err, res, body) {
-        localPost(res.headers.location, abody);
+        localPost(res.headers['reply-location'], abody);
       }
     });
     it("should not be received by other offers", function(done) {
@@ -122,7 +122,7 @@ describe("Offer-Answer flow", function() {
           cb(err,function answerer(abody, fcb) {
             expectedAnswer = abody; finalCallback = fcb;
             localGet(endpoint,function(err,res,body){
-              localPost(res.headers.location, abody);
+              localPost(res.headers['reply-location'], abody);
             });
           });
 
