@@ -14,7 +14,7 @@ exports.post = function localPost(url, body, cb) {
 
 function assertServerSuccess(cb) {
   return function(err, res, body) {
-    if (res.statusCode >= 500) {
+    if (!err && res.statusCode >= 500) {
       assert.fail(res.statusCode, 500, body, '<');
     } else cb && cb(err,res,body);
   };
