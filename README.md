@@ -2,6 +2,8 @@
 
 Chatphrase Asynchronous Representational State Signaling
 
+[![Build Status](https://travis-ci.org/chatphrase/caress.png?branch=master)](https://travis-ci.org/chatphrase/caress)
+
 ## Minimum requirements
 
 Note that this system uses [Lua scripts][], and as such **requires at least
