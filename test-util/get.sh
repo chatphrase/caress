@@ -1,1 +1,0 @@
-curl -v localhost:3000$1

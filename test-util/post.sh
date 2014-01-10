@@ -1,1 +1,0 @@
-curl -v -H "Content-Type: text/plain" --data-binary $2 localhost:3000$1
