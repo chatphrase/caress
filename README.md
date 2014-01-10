@@ -17,7 +17,7 @@ Cluster-compatible.
 
 ## Configuration
 
-Configuration for the database espects a "redis" object with "port" and
+Configuration for the database expects a "redis" object with "port" and
 "hostname", as used by [envigor][].
 
 [envigor]: https://github.com/stuartpb/envigor
