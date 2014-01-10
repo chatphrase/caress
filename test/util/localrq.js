@@ -1,5 +1,5 @@
 var request = require('request');
-var localRoot = 'http://localhost:' + process.env.PORT || 3000;
+var localRoot = 'http://localhost:' + (process.env.PORT || 3000);
 var assert = require('assert');
 
 exports.get = function localGet(url, cb) {
