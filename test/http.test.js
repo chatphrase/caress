@@ -61,11 +61,13 @@ function assertStatus(expected, cb) {
   };
 }
 
-function assertBody(expected, cb) {
+function assertStatusAndBody(expectedStatus, expectedBody, cb) {
   return function (err, res, body) {
     if (err) return cb(err);
 
-    assert.equal(body, expected);
+    assert.deepEqual(
+      {status: res.statusCode, body: body},
+      {status: expectedStatus, body: expectedBody});
     cb && cb(err, res, body);
   };
 }
@@ -85,7 +87,7 @@ describe("Offer-Answer flow", function() {
       var endpoint = '/offers/telegram';
       var body = 'test body';
       localPost(endpoint,body,assertStatus(201,
-        cbwrap(localGet,endpoint,assertStatus(200,assertBody(body,done)))));
+        cbwrap(localGet,endpoint,assertStatusAndBody(200,body,done))));
     });
   });
   describe("answers to offers", function() {
@@ -108,7 +110,8 @@ describe("Offer-Answer flow", function() {
       localPost(endpoint,obody,listenForAnswer);
 
       function listenForAnswer(err, res, body) {
-        localGet(res.headers.location,assertBody(abody, done));
+        localGet(res.headers.location,
+          assertStatusAndBody(200, abody, done));
         localGet(endpoint,answerOffer);
       }
 
