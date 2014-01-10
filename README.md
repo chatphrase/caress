@@ -4,16 +4,10 @@ Chatphrase Asynchronous Representational State Signaling
 
 ## Minimum requirements
 
-Note that this system uses [Lua scripts][] and
-[options for the SET command][SET options] that were added in Redis 2.6.12,
-and as such **requires at least Redis 2.6.12** to run.
+Note that this system uses [Lua scripts][], and as such **requires at least
+Redis 2.6** to run.
 
 [Lua scripts]: http://redis.io/commands/eval
-[SET options]: http://redis.io/commands/set
-
-If you use a version of Redis earlier than 2.6.12, caress ***will fail*** the
-first time it handles a request that does anything (essentially any POST or
-PUT request).
 
 The Lua scripts as written do *not* use KEYS arguments to declare their
 operated-on keys, and as such should be considered *not* Redis
