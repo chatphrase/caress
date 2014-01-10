@@ -1,74 +1,27 @@
 /*global describe it*/
 
 var assert = require('assert');
-var request = require('request');
+var local = require('./util/localrq.js');
+var assertCb = require('./util/assertcbs.js');
+var cbwrap = require('./util/cbwrap.js');
 var queue = require('queue-async');
-
-// Utility functions
-
-function cbwrap(func) {
-  var args = Array.prototype.slice.call(arguments,1);
-  return function() {
-    return func.apply(this,args);
-  };
-}
-
-var localRoot = 'http://localhost:' + process.env.PORT || 3000;
-
-function localGet(url, cb) {
-  return request({url: localRoot + url, encoding: 'utf8',
-    method: 'GET'}, assertServerSuccess(cb));
-}
-
-function localPost(url, body, cb) {
-  return request({url: localRoot + url, encoding: 'utf8',
-    method: 'POST', body: body}, assertServerSuccess(cb));
-}
-
-function assertServerSuccess(cb) {
-  return function(err, res, body) {
-    if (res.statusCode >= 500) {
-      assert.fail(res.statusCode, 500, body, '<');
-    } else cb && cb(err,res,body);
-  };
-}
-
-function assertStatus(expected, cb) {
-  return function (err, res, body) {
-    if (err) return cb(err);
-
-    assert.equal(res.statusCode, expected);
-    cb && cb(err, res, body);
-  };
-}
-
-function assertStatusAndBody(expectedStatus, expectedBody, cb) {
-  return function (err, res, body) {
-    if (err) return cb(err);
-
-    assert.deepEqual(
-      {status: res.statusCode, body: body},
-      {status: expectedStatus, body: expectedBody});
-    cb && cb(err, res, body);
-  };
-}
 
 describe("Offer-Answer flow", function() {
   describe("missing offers", function() {
     it("should 404", function(done) {
-      localGet('/offers/nothing', assertStatus(404,done));
+      local.get('/offers/nothing', assertCb.status(404,done));
     });
     it("should 404 even when another offer is posted", function(done) {
-      localPost('/offers/do','dew',
-        cbwrap(localGet,'/offers/do-without',assertStatus(404,done)));
+      local.post('/offers/do','dew',
+        cbwrap(local.get,'/offers/do-without',assertCb.status(404,done)));
     });
   });
   describe("initial offers", function() {
     it("should post and be readable", function(done) {
       var endpoint = '/offers/telegram';
       var body = 'test body';
-      localPost(endpoint,body,assertStatus(201,
-        cbwrap(localGet,endpoint,assertStatusAndBody(200,body,done))));
+      local.post(endpoint,body,assertCb.status(201,
+        cbwrap(local.get,endpoint,assertCb.statusAndBody(200,body,done))));
     });
   });
   describe("answers to offers", function() {
@@ -76,28 +29,28 @@ describe("Offer-Answer flow", function() {
       var endpoint = '/offers/flashpoint';
       var obody = 'offer body';
       var abody = 'answer body';
-      localPost(endpoint,obody,assertStatus(201,
-        cbwrap(localGet,endpoint,assertStatus(200,answerOffer))));
+      local.post(endpoint,obody,assertCb.status(201,
+        cbwrap(local.get,endpoint,assertCb.status(200,answerOffer))));
 
       function answerOffer(err, res, body) {
-        localPost(res.headers['reply-location'], abody,
-          cbwrap(localGet,endpoint,assertStatus(404,done)));
+        local.post(res.headers['reply-location'], abody,
+          cbwrap(local.get,endpoint,assertCb.status(404,done)));
       }
     });
     it("should be received by the offerer", function(done) {
       var endpoint = '/offers/get-this';
       var obody = 'offer initial body';
       var abody = 'answer initial body';
-      localPost(endpoint,obody,listenForAnswer);
+      local.post(endpoint,obody,listenForAnswer);
 
       function listenForAnswer(err, res, body) {
-        localGet(res.headers.location,
-          assertStatusAndBody(200, abody, done));
-        localGet(endpoint,answerOffer);
+        local.get(res.headers.location,
+          assertCb.statusAndBody(200, abody, done));
+        local.get(endpoint,answerOffer);
       }
 
       function answerOffer(err, res, body) {
-        localPost(res.headers['reply-location'], abody);
+        local.post(res.headers['reply-location'], abody);
       }
     });
     it("should not be received by other offers", function(done) {
@@ -105,16 +58,16 @@ describe("Offer-Answer flow", function() {
       // callback for a call that was made *earlier*. This makes sense in my
       // head, even though it's totally bananas in code.
       function timeyWimeyBall(endpoint, obody, cb) {
-        localPost(endpoint, obody, function(err, res, body) {
+        local.post(endpoint, obody, function(err, res, body) {
           // This will be set a couple callbacks down
           var expectedAnswer, finalCallback;
 
-          localGet(res.headers.location, receiveAnswer);
+          local.get(res.headers.location, receiveAnswer);
 
           cb(err,function answerer(abody, fcb) {
             expectedAnswer = abody; finalCallback = fcb;
-            localGet(endpoint,function(err,res,body){
-              localPost(res.headers['reply-location'], abody);
+            local.get(endpoint,function(err,res,body){
+              local.post(res.headers['reply-location'], abody);
             });
           });
 
