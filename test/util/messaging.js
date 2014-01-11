@@ -2,9 +2,10 @@ var local = require('./localrq.js');
 var assertCb = require('./assertcbs.js');
 var queue = require('queue-async');
 
-exports.messageTest = function messageTest(sendUrl, receiveUrl, body, cb) {
+function messageTest(sendUrl, receiveUrl, body, cb) {
   return getAndSendNow(GetSendTest(sendUrl, receiveUrl), body, cb);
-};
+}
+exports.messageTest = messageTest;
 
 function getAndSendNow(test, body, cb) {
   return queue().defer(test.get).defer(test.send, body).await(cb);
@@ -62,12 +63,12 @@ function cbCreatedLocation(cb){
   });
 }
 
-exports.offerTest =
 function offerTest(offerPoint, obody, cb) {
   local.post(offerPoint, obody, cbCreatedLocation(cb));
-};
+}
+exports.offerTest = offerTest;
 
-exports.answerTest =
+
 function answerTest(offerPoint, obody, offererId, cb) {
   local.get(offerPoint,
     assertCb.statusAndBody(200, obody, function(err, res, body) {
@@ -80,9 +81,9 @@ function answerTest(offerPoint, obody, offererId, cb) {
         local.post(replyLocation, body, cbCreatedLocation(cb));
       }));
   }));
-};
+}
+exports.answerTest = answerTest;
 
-exports.offerTestAnswerer =
 function offerTestAnswerer(offerPoint, obody, cb) {
   offerTest(offerPoint, obody, function(err, offererId) {
     if (err) return cb(err);
@@ -93,9 +94,9 @@ function offerTestAnswerer(offerPoint, obody, cb) {
       });
     });
   });
-};
+}
+exports.offerTestAnswerer = offerTestAnswerer;
 
-exports.answerOfferTest =
 function answerOfferTest(offerPoint, obody, abody, cb) {
   offerTest(offerPoint, obody, function(err, offererId) {
     if (err) return cb(err);
@@ -104,4 +105,5 @@ function answerOfferTest(offerPoint, obody, abody, cb) {
       getAndSendNow(test, abody, cb);
     });
   });
-};
+}
+exports.answerOfferTest = answerOfferTest;
