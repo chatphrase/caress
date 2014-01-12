@@ -1,5 +1,6 @@
 var local = require('./localrq.js');
 var assertCb = require('./assertcbs.js');
+var assert = require('assert');
 var queue = require('queue-async');
 
 function messageTest(sendUrl, receiveUrl, body, cb) {
@@ -24,13 +25,20 @@ function getLoop(getF, cb) {
 }
 
 function ExpectedBodyTest(getF, sendF){
-  var expectBody;
+  var expectedBody;
   return {
     get: function(cb) {
-      getLoop(getF, assertCb.statusAndBody(200, expectBody, cb));
+      getLoop(getF, function (err, res, body) {
+        if (err) return cb(err);
+    
+        assert.deepEqual(
+          {status: res.statusCode, body: body},
+          {status: 200, body: expectedBody});
+        cb && cb(err, res, body);
+      });
     },
     send: function(body, cb){
-      expectBody = body;
+      expectedBody = body;
       sendF(body, cb);
     }
   };
