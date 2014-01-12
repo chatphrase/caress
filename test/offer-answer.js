@@ -2,7 +2,6 @@
 
 var local = require('./util/localrq.js');
 var assertCb = require('./util/assertcbs.js');
-var cbwrap = require('./util/cbwrap.js');
 var messaging = require('./util/messaging.js');
 var queue = require('queue-async');
 
@@ -13,7 +12,7 @@ describe("Offer-Answer flow", function() {
     });
     it("should 404 even when another offer is posted", function(done) {
       messaging.offerTest('/offers/do','dew',
-        cbwrap(local.get,'/offers/do-without', assertCb.status(404, done)));
+        local.get.bind(null,'/offers/do-without', assertCb.status(404, done)));
     });
   });
   describe("initial offers", function() {
@@ -21,7 +20,7 @@ describe("Offer-Answer flow", function() {
       var endpoint = '/offers/telegram';
       var body = 'test body';
       messaging.offerTest(endpoint, body,
-        cbwrap(local.get, endpoint,
+        local.get.bind(null, endpoint,
           assertCb.statusAndBody(200, body, done)));
     });
   });
@@ -37,7 +36,7 @@ describe("Offer-Answer flow", function() {
       var obody = 'offer body';
       var abody = 'answer body';
       messaging.answerOfferTest(endpoint, obody, abody,
-        cbwrap(local.get, endpoint, assertCb.status(404, done)));
+        local.get.bind(null, endpoint, assertCb.status(404, done)));
     });
     it("should not be received by other offers", function(done) {
       // This function calls a callback that takes a function that sets a
