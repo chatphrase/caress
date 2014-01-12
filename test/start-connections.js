@@ -51,7 +51,7 @@ describe("Start flow", function() {
       var abody = 'relevant second body';
       local.post(endpoint, obody, assertCb.status(202,
         function(err, res, body) { if(err) return done(err);
-          messaging.getLoop(local.get.bind(res.headers.location),
+          messaging.getLoop(local.get.bind(null,res.headers.location),
             assertCb.statusAndBody(200,abody,done));
           local.post(endpoint, abody, assertCb.status(201,
             function(err, res, body) { if(err) return done(err); }
@@ -68,7 +68,8 @@ describe("Start flow", function() {
       local.post(endpoint, obody, assertCb.status(202,
         function(err, res, body) { if(err) return done(err);
           // get from the first for timeout reasons
-          q.defer(messaging.getLoop, local.get.bind(res.headers.location));
+          q.defer(messaging.getLoop,
+            local.get.bind(null,res.headers.location));
           local.post(endpoint, abody, assertCb.status(201,
             function(err, res, body) { if(err) return done(err);
               q.defer(function(cb) {
@@ -88,11 +89,11 @@ describe("Start flow", function() {
         function(err, res, body) { if(err) return done(err);
           var firstSide = res.headers.location;
           // get from the first for timeout reasons
-          messaging.getLoop(local.get.bind(res.headers.location),
+          messaging.getLoop(local.get.bind(null,res.headers.location),
             assertCb.statusAndBody(200,abody));
           local.post(endpoint, abody, assertCb.status(201,
             function(err, res, body) { if(err) return done(err);
-              messaging.getLoop(local.get.bind(res.headers.location),
+              messaging.getLoop(local.get.bind(null,res.headers.location),
                 assertCb.statusAndBody(200,rbody,done));
               local.post(firstSide, rbody, assertCb.status(200,
                 function(err, res, body) { if(err) return done(err); }
