@@ -30,7 +30,7 @@ function ExpectedBodyTest(getF, sendF){
     get: function(cb) {
       getLoop(getF, function (err, res, body) {
         if (err) return cb(err);
-    
+
         assert.deepEqual(
           {status: res.statusCode, body: body},
           {status: 200, body: expectedBody});
@@ -95,7 +95,7 @@ exports.answerTest = answerTest;
 function offerTestAnswerer(offerPoint, obody, cb) {
   offerTest(offerPoint, obody, function(err, offererId) {
     if (err) return cb(err);
-    return cb(err, function answerer(abody) {
+    return cb(err, function answerer(abody, cb) {
       answerTest(offerPoint, obody, offererId, function(err, test) {
         if (err) return cb(err);
         getAndSendNow(test, abody, cb);
