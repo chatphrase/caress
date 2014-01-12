@@ -7,6 +7,11 @@ exports.get = function localGet(url, cb) {
     method: 'GET'}, assertServerSuccess(cb));
 };
 
+exports.put = function localPost(url, body, cb) {
+  return request({url: localRoot + url, encoding: 'utf8',
+    method: 'PUT', body: body}, assertServerSuccess(cb));
+};
+
 exports.post = function localPost(url, body, cb) {
   return request({url: localRoot + url, encoding: 'utf8',
     method: 'POST', body: body}, assertServerSuccess(cb));

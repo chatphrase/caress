@@ -11,11 +11,11 @@ describe("UUIDs", function() {
           assertCb.status(404, done));
       });
       it("on put", function(done) {
-        local.put('/00000000-0000-0000-0000-000000000000',
+        local.put('/00000000-0000-0000-0000-000000000000','',
           assertCb.status(404, done));
       });
       it("on post", function(done) {
-        local.post('/00000000-0000-0000-0000-000000000000',
+        local.post('/00000000-0000-0000-0000-000000000000','',
           assertCb.status(404, done));
       });
     });
