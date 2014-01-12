@@ -4,9 +4,9 @@ function startServer(){
   var cfg = require("envigor")();
   
   // since we don't need to worry about latency to localhost,
-  // use really quick timeouts
-  var waitDuration = 250;
-  cfg.pollWait = cfg.afterWait = waitDuration;
+  // use really quick long-polls and fairly short timeouts
+  cfg.pollWait = 50;
+  cfg.afterWait = 250;
   
   cfg.port = cfg.port || 3000;
   
