@@ -23,6 +23,7 @@ function getLoop(getF, cb) {
   }
   getF(checkBody);
 }
+exports.getLoop = getLoop;
 
 function ExpectedBodyTest(getF, sendF){
   var expectedBody;
